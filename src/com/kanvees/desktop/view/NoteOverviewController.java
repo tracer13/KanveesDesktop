@@ -4,6 +4,7 @@ import com.kanvees.desktop.InitApp;
 import com.kanvees.desktop.model.Note;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.controlsfx.dialog.Dialogs;
 
 public class NoteOverviewController {
 
@@ -32,7 +33,6 @@ public class NoteOverviewController {
 
     /**
      * shows details of an existing or new note
-     * @param note
      */
     private void showNoteDetails(Note note){
 
@@ -79,9 +79,18 @@ public class NoteOverviewController {
     /**
      * Handling 'Delete' button (delete selected note)
      */
+    @SuppressWarnings("deprecation")
     @FXML
     private void handleDelete(){
         int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
-        noteTable.getItems().remove(selectedIndex);
+        if (selectedIndex >=0){
+            noteTable.getItems().remove(selectedIndex);
+        }else{
+            Dialogs.create()
+                    .title("Error")
+                    .masthead("Note is not selected")
+                    .message("Please select a note to delete")
+                    .showWarning();
+        }
     }
 }
