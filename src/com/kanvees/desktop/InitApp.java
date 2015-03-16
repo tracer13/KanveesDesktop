@@ -1,0 +1,85 @@
+package com.kanvees.desktop;
+
+import com.kanvees.desktop.model.Note;
+import com.kanvees.desktop.view.NoteOverviewController;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class InitApp extends Application {
+
+    private Stage primaryStage;
+    private BorderPane rootLayout;
+
+    private ObservableList<Note> noteList = FXCollections.observableArrayList();
+
+
+    public InitApp(){
+        noteList.add(new Note ("First Note", "Some test note text"));
+        noteList.add(new Note ("Second Note", "Another text to test app"));
+    }
+
+    public ObservableList<Note> getNoteList() {return noteList;}
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Kanvees Desktop");
+
+        initRootLayout();
+
+        showNoteOverview();
+    }
+
+    public void initRootLayout() {
+
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(InitApp.class.getResource("view/BasicRootLayout.fxml"));
+
+            rootLayout = (BorderPane) loader.load();
+
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+
+            primaryStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void showNoteOverview() {
+
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(InitApp.class.getResource("view/NoteOverview.fxml"));
+
+            AnchorPane noteOverview = (AnchorPane) loader.load();
+
+            rootLayout.setCenter(noteOverview);
+
+            NoteOverviewController controller = loader.getController();
+            controller.setInitApp(this);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+}
