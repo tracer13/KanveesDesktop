@@ -4,6 +4,7 @@ import com.kanvees.desktop.InitApp;
 import com.kanvees.desktop.model.Note;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import org.controlsfx.dialog.Dialogs;
 
 public class NoteOverviewController {
@@ -18,10 +19,8 @@ public class NoteOverviewController {
     @FXML
     private TextArea noteBodyArea;
 
-//    @FXML
-//    private Label noteTitleLabel;
-//    @FXML
-//    private Label noteBodyLabel;
+    @FXML
+    private AnchorPane rightAnchorPane;
 
     private InitApp initApp;
 
@@ -37,6 +36,7 @@ public class NoteOverviewController {
     private void showNoteDetails(Note note){
 
         if (note != null){
+            rightAnchorPane.setVisible(true);
             noteTitleField.setText(note.getNoteTitle());
             noteBodyArea.setText(note.getNoteBody());
 
@@ -92,5 +92,39 @@ public class NoteOverviewController {
                     .message("Please select a note to delete")
                     .showWarning();
         }
+    }
+
+    /**
+     * Handling 'Create New...'->'SimpleNote' button
+     */
+    @FXML
+    private void handleCreateSimpleNote(){
+        Note tempNote = new Note();
+        tempNote.setNoteTitle("New note");
+        noteTable.getItems().add(tempNote);
+    }
+
+    /**
+     * Handling 'Create New...'->'Task' button
+     */
+    @SuppressWarnings("deprecation")
+    @FXML
+    private void handleCreateTask(){
+        Dialogs.create()
+                .title("Notification")
+                .masthead("This function is currently under development")
+                .showInformation();
+    }
+
+    /**
+     * Handling 'Create New...'->'To-Do' button
+     */
+    @SuppressWarnings("deprecation")
+    @FXML
+    private void handleCreateToDo(){
+        Dialogs.create()
+                .title("Notification")
+                .masthead("This function is currently under development")
+                .showInformation();
     }
 }

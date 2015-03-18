@@ -38,6 +38,10 @@ public class InitApp extends Application {
         showNoteOverview();
     }
 
+
+    /**
+     * Calls the 'Root Layout' layer
+     */
     public void initRootLayout() {
 
         try{
@@ -55,6 +59,9 @@ public class InitApp extends Application {
         }
     }
 
+    /**
+     * Calls the 'Note Overview' layer
+     */
     public void showNoteOverview() {
 
         try{
@@ -72,7 +79,6 @@ public class InitApp extends Application {
             e.printStackTrace();
         }
     }
-
 
     public Stage getPrimaryStage() {
         return primaryStage;
