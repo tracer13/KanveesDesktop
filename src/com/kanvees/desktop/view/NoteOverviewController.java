@@ -100,12 +100,14 @@ public class NoteOverviewController {
     @FXML
     private void handleCreateSimpleNote(){
         Note tempNote = new Note();
-        tempNote.setNoteTitle("New note");
         noteTable.getItems().add(tempNote);
+        int noteIndex = noteTable.getItems().size()-1;
+        noteTable.getSelectionModel().select(noteIndex);
     }
 
     /**
      * Handling 'Create New...'->'Task' button
+     * !!!Not developed yet
      */
     @SuppressWarnings("deprecation")
     @FXML
@@ -118,6 +120,7 @@ public class NoteOverviewController {
 
     /**
      * Handling 'Create New...'->'To-Do' button
+     * !!!Not developed yet
      */
     @SuppressWarnings("deprecation")
     @FXML
