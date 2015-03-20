@@ -22,6 +22,15 @@ public class NoteOverviewController {
     @FXML
     private AnchorPane rightAnchorPane;
 
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private Tab simpleNoteTab;
+    @FXML
+    private Tab taskTab;
+    @FXML
+    private Tab toDoTab;
+
     private InitApp initApp;
 
     /**
@@ -101,6 +110,7 @@ public class NoteOverviewController {
     private void handleCreateSimpleNote(){
         Note tempNote = new Note();
         noteTable.getItems().add(tempNote);
+        tabPane.getSelectionModel().select(0);
         int noteIndex = noteTable.getItems().size()-1;
         noteTable.getSelectionModel().select(noteIndex);
     }
@@ -112,6 +122,7 @@ public class NoteOverviewController {
     @SuppressWarnings("deprecation")
     @FXML
     private void handleCreateTask(){
+        tabPane.getSelectionModel().select(1);
         Dialogs.create()
                 .title("Notification")
                 .masthead("This function is currently under development")
@@ -125,6 +136,7 @@ public class NoteOverviewController {
     @SuppressWarnings("deprecation")
     @FXML
     private void handleCreateToDo(){
+        tabPane.getSelectionModel().select(2);
         Dialogs.create()
                 .title("Notification")
                 .masthead("This function is currently under development")

@@ -11,14 +11,6 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="noteTable" layoutY="7.0" prefHeight="333.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
-                    <columns>
-                      <TableColumn fx:id="noteTitleColumn" prefWidth="234.0" text="Your Notes" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
                   <HBox layoutX="8.0" layoutY="334.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                   <HBox layoutX="14.0" layoutY="9.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
@@ -32,6 +24,24 @@
                         <Button layoutX="121.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleDelete" prefWidth="58.0" text="Delete" />
                      </children>
                   </HBox>
+                  <TabPane fx:id="tabPane" layoutY="37.0" prefHeight="336.0" prefWidth="236.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab fx:id="simpleNoteTab" text="Notes">
+                           <content>
+                              <TableView fx:id="noteTable" prefHeight="315.0" prefWidth="236.0">
+                                <columns>
+                                  <TableColumn fx:id="noteTitleColumn" prefWidth="234.0" text="Your Notes" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </content>
+                        </Tab>
+                      <Tab fx:id="taskTab" text="Tasks" />
+                        <Tab fx:id="toDoTab" text="To-Do" />
+                    </tabs>
+                  </TabPane>
                </children>
             </AnchorPane>
           <AnchorPane fx:id="rightAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" visible="false">
