@@ -26,7 +26,7 @@
                   </HBox>
                   <TabPane fx:id="tabPane" layoutY="37.0" prefHeight="336.0" prefWidth="236.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab fx:id="simpleNoteTab" text="Notes">
+                      <Tab text="Notes">
                            <content>
                               <TableView fx:id="noteTable" prefHeight="315.0" prefWidth="236.0">
                                 <columns>
@@ -38,8 +38,24 @@
                               </TableView>
                            </content>
                         </Tab>
-                      <Tab fx:id="taskTab" text="Tasks" />
-                        <Tab fx:id="toDoTab" text="To-Do" />
+                      <Tab text="Tasks">
+                           <content>
+                              <TableView prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn prefWidth="236.0" text="Your Tasks" />
+                                </columns>
+                              </TableView>
+                           </content>
+                        </Tab>
+                        <Tab text="To-Do">
+                           <content>
+                              <TableView prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn prefWidth="236.0" text="Your To-Do" />
+                                </columns>
+                              </TableView>
+                           </content>
+                        </Tab>
                     </tabs>
                   </TabPane>
                </children>

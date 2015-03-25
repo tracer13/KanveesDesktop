@@ -24,12 +24,6 @@ public class NoteOverviewController {
 
     @FXML
     private TabPane tabPane;
-    @FXML
-    private Tab simpleNoteTab;
-    @FXML
-    private Tab taskTab;
-    @FXML
-    private Tab toDoTab;
 
     private InitApp initApp;
 
