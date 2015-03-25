@@ -1,6 +1,7 @@
 package com.kanvees.desktop;
 
 import com.kanvees.desktop.model.Note;
+import com.kanvees.desktop.model.Task;
 import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -19,14 +20,19 @@ public class InitApp extends Application {
     private BorderPane rootLayout;
 
     private ObservableList<Note> noteList = FXCollections.observableArrayList();
+    private ObservableList<Task> taskList = FXCollections.observableArrayList();
 
 
     public InitApp(){
         noteList.add(new Note ("First Note", "Some test note text"));
         noteList.add(new Note ("Second Note", "Another text to test app"));
+
+        taskList.add(new Task ("First Task", "first task description"));
+        taskList.add(new Task ("Second Task", "second task description"));
     }
 
     public ObservableList<Note> getNoteList() {return noteList;}
+    public ObservableList<Task> getTaskList() {return taskList;}
 
     @Override
     public void start(Stage primaryStage) {

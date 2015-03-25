@@ -1,5 +1,6 @@
 package com.kanvees.desktop.model;
 
+import com.kanvees.desktop.model.enums.ImportanceEnum;
 import javafx.beans.property.*;
 
 import java.time.LocalDateTime;
@@ -7,10 +8,10 @@ import java.time.LocalDateTime;
 public class Task {
 
     private final StringProperty taskTitle;
-    private final StringProperty taskBody;
+    private final StringProperty taskDescription;
     private final StringProperty colorLabel;
     private final ObjectProperty<LocalDateTime> endTime;
-    private final StringProperty importance;
+    private final ObjectProperty<ImportanceEnum> importance;
     private final BooleanProperty isRepetitive;
 
     /**
@@ -23,15 +24,15 @@ public class Task {
     /**
      * Constructor with initial data
      * @param taskTitle
-     * @param taskBody
+     * @param taskDescription
      */
-    public Task(String taskTitle, String taskBody) {
+    public Task(String taskTitle, String taskDescription) {
         this.taskTitle = new SimpleStringProperty(taskTitle);
-        this.taskBody = new SimpleStringProperty(taskBody);
+        this.taskDescription = new SimpleStringProperty(taskDescription);
 
-        this.colorLabel = new SimpleStringProperty("white");
+        this.colorLabel = new SimpleStringProperty("");
         this.endTime = new SimpleObjectProperty<LocalDateTime>(LocalDateTime.of(2015, 03, 31, 22, 00, 00));
-        this.importance = new SimpleStringProperty("Regular");
+        this.importance = new SimpleObjectProperty<>(ImportanceEnum.REGULAR);
 
         this.isRepetitive = new SimpleBooleanProperty(false);
     }
@@ -55,16 +56,16 @@ public class Task {
     /**
      * body getter\setter
      */
-    public String getTaskBody() {
-        return taskBody.get();
+    public String getTaskDescription() {
+        return taskDescription.get();
     }
 
-    public StringProperty taskBodyProperty() {
-        return taskBody;
+    public StringProperty taskDescriptionProperty() {
+        return taskDescription;
     }
 
-    public void setTaskBody(String taskBody) {
-        this.taskBody.set(taskBody);
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription.set(taskDescription);
     }
 
 
@@ -102,15 +103,15 @@ public class Task {
     /**
      * importance getter\setter
      */
-    public String getImportance() {
+    public ImportanceEnum getImportance() {
         return importance.get();
     }
 
-    public StringProperty importanceProperty() {
+    public ObjectProperty<ImportanceEnum> importanceProperty() {
         return importance;
     }
 
-    public void setImportance(String importance) {
+    public void setImportance(ImportanceEnum importance) {
         this.importance.set(importance);
     }
 
