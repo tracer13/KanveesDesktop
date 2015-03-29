@@ -71,6 +71,8 @@ public class NoteOverviewController {
             noteTitleField.setPromptText("Enter Note Title");
             noteBodyArea.setPromptText("Enter Note Text");
         }
+
+        checkEmptyNotes();
     }
 
     private void showTaskDetails(Task task){
@@ -84,8 +86,12 @@ public class NoteOverviewController {
             taskDescriptionArea.setText(task.getTaskDescription());
             importanceChoiceBox.setValue(task.getImportance());
         }else{
+            taskTitleField.setPromptText("Enter task title");
+            taskDescriptionArea.setPromptText("Enter task description");
             importanceChoiceBox.setValue(ImportanceEnum.REGULAR);
         }
+
+        checkEmptyTasks();
     }
 
     @FXML
@@ -137,20 +143,33 @@ public class NoteOverviewController {
     }
 
     /**
-     * Handling 'Delete' button (delete selected note)
+     * Handling 'Delete' button (delete selected note or task)
      */
     @SuppressWarnings("deprecation")
     @FXML
     private void handleDelete(){
-        int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >=0){
-            noteTable.getItems().remove(selectedIndex);
-        }else{
-            Dialogs.create()
-                    .title("Error")
-                    .masthead("Note is not selected")
-                    .message("Please select a note to delete")
-                    .showWarning();
+        if (tabPane.getSelectionModel().isSelected(0)){
+            int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >=0){
+                noteTable.getItems().remove(selectedIndex);
+            }else{
+                Dialogs.create()
+                        .title("Error")
+                        .masthead("Note is not selected")
+                        .message("Please select a note to delete")
+                        .showWarning();
+            }
+        } else if (tabPane.getSelectionModel().isSelected(1)){
+            int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >=0){
+                taskTable.getItems().remove(selectedIndex);
+            }else{
+                Dialogs.create()
+                        .title("Error")
+                        .masthead("Task is not selected")
+                        .message("Please select a task to delete")
+                        .showWarning();
+            }
         }
     }
 
@@ -162,22 +181,22 @@ public class NoteOverviewController {
         Note tempNote = new Note();
         noteTable.getItems().add(tempNote);
         tabPane.getSelectionModel().select(0);
-        int noteIndex = noteTable.getItems().size()-1;
-        noteTable.getSelectionModel().select(noteIndex);
+        int tempNoteIndex = noteTable.getItems().size()-1;
+        noteTable.getSelectionModel().select(tempNoteIndex);
     }
 
     /**
      * Handling 'Create New...'->'Task' button
-     * !!!Not developed yet
+     *
      */
     @SuppressWarnings("deprecation")
     @FXML
     private void handleCreateTask(){
+        Task tempTask = new Task();
+        taskTable.getItems().add(tempTask);
         tabPane.getSelectionModel().select(1);
-        Dialogs.create()
-                .title("Notification")
-                .masthead("This function is currently under development")
-                .showInformation();
+        int taskIndex = taskTable.getItems().size()-1;
+        taskTable.getSelectionModel().select(taskIndex);
     }
 
     /**
@@ -195,7 +214,35 @@ public class NoteOverviewController {
     }
 
 
+    /**
+     * Performs check if there are null or empty notes (title and description null or empty)
+     * is used in showNoteDetails()
+     */
+    private void checkEmptyNotes(){
+        for (int i = 0; i <= noteTable.getItems().size()-1; i++) {
+            if (noteTable.getSelectionModel().getSelectedIndex() != i &&
+                    (noteTable.getItems().get(i).getNoteTitle() == null || noteTable.getItems().get(i).getNoteTitle().isEmpty()) &&
+                    (noteTable.getItems().get(i).getNoteBody() == null || noteTable.getItems().get(i).getNoteBody().isEmpty())) {
 
+                noteTable.getItems().remove(i);
+            }
+        }
+    }
+
+    /**
+     * Performs check if there are null empty tasks (title and description null or empty)
+     * is used in showTaskDetails()
+     */
+    private void checkEmptyTasks(){
+        for (int i = 0; i <= taskTable.getItems().size()-1; i++){
+            if (taskTable.getSelectionModel().getSelectedIndex() != i &&
+                    (taskTable.getItems().get(i).getTaskTitle() == null || taskTable.getItems().get(i).getTaskTitle().isEmpty()) &&
+                    (taskTable.getItems().get(i).getTaskDescription() == null || taskTable.getItems().get(i).getTaskDescription().isEmpty())){
+
+                taskTable.getItems().remove(i);
+            }
+        }
+    }
 
 
 }
