@@ -2,3 +2,16 @@
     -fx-font-size: 30pt;
     -fx-text-fill: black;
 }
+.table-view {
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
