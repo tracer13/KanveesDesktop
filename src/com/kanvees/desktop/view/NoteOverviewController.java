@@ -39,6 +39,8 @@ public class NoteOverviewController {
     @FXML
     private TableColumn<Task, String> taskTitleColumn;
     @FXML
+    private TableColumn<Task, String> taskImportanceColumn;
+    @FXML
     private TextField taskTitleField;
     @FXML
     private TextArea taskDescriptionArea;
@@ -85,10 +87,12 @@ public class NoteOverviewController {
             taskTitleField.setText(task.getTaskTitle());
             taskDescriptionArea.setText(task.getTaskDescription());
             importanceChoiceBox.setValue(task.getImportance());
+            task.setImportanceString(task.getImportance().getStringValue());
         }else{
             taskTitleField.setPromptText("Enter task title");
             taskDescriptionArea.setPromptText("Enter task description");
             importanceChoiceBox.setValue(ImportanceEnum.REGULAR);
+
         }
 
         checkEmptyTasks();
@@ -99,6 +103,8 @@ public class NoteOverviewController {
 
         noteTitleColumn.setCellValueFactory(cellData -> cellData.getValue().noteTitleProperty());
         taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
+        taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
+        taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
 
         showNoteDetails(null);
         showTaskDetails(null);
@@ -140,6 +146,7 @@ public class NoteOverviewController {
         task.setTaskTitle(taskTitleField.getText());
         task.setTaskDescription(taskDescriptionArea.getText());
         task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
+        task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
     }
 
     /**
@@ -243,6 +250,4 @@ public class NoteOverviewController {
             }
         }
     }
-
-
 }

@@ -16,4 +16,20 @@ public enum ImportanceEnum {
     public String toString(){
         return label;
     }
+
+    public String getStringValue (){
+        String importanceStringValue = "";
+        switch (label) {
+            case "Not important":
+                importanceStringValue = " ";
+                break;
+            case "Important":
+                importanceStringValue=  "!";
+                break;
+            case "Critical":
+                importanceStringValue = "!!";
+                break;
+        }
+        return importanceStringValue;
+    }
 }

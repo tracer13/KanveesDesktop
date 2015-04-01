@@ -14,6 +14,8 @@ public class Task {
     private final ObjectProperty<ImportanceEnum> importance;
     private final BooleanProperty isRepetitive;
 
+    private final StringProperty importanceString;
+
     /**
      * Default constructor
      */
@@ -35,6 +37,8 @@ public class Task {
         this.importance = new SimpleObjectProperty<>(ImportanceEnum.REGULAR);
 
         this.isRepetitive = new SimpleBooleanProperty(false);
+
+        this.importanceString = new SimpleStringProperty("");
     }
 
     /**
@@ -128,5 +132,18 @@ public class Task {
 
     public void setIsRepetitive(boolean isRepetitive) {
         this.isRepetitive.set(isRepetitive);
+    }
+
+
+    public  String getImportanceString() {
+        return importanceString.get();
+    }
+
+    public StringProperty importanceStringProperty() {
+        return importanceString;
+    }
+
+    public void setImportanceString(String importanceString) {
+        this.importanceString.set(getImportance().getStringValue());
     }
 }
