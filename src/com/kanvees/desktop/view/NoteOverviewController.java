@@ -7,6 +7,9 @@ import com.kanvees.desktop.model.enums.ImportanceEnum;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Callback;
 import org.controlsfx.dialog.Dialogs;
 
 public class NoteOverviewController {
@@ -41,11 +44,15 @@ public class NoteOverviewController {
     @FXML
     private TableColumn<Task, String> taskImportanceColumn;
     @FXML
+    private TableColumn<Task, Color> taskColorLabelColumn;
+    @FXML
     private TextField taskTitleField;
     @FXML
     private TextArea taskDescriptionArea;
     @FXML
     private  ChoiceBox importanceChoiceBox;
+    @FXML
+    private ComboBox colorComboBox;
 
 //    private ImportanceEnum importanceEnum;
 
@@ -80,6 +87,7 @@ public class NoteOverviewController {
     private void showTaskDetails(Task task){
 
         importanceChoiceBox.getItems().setAll(ImportanceEnum.values());
+        setColorFillInComboBox();
 
         if (task != null){
             noteAnchorPane.setVisible(false);
@@ -88,10 +96,12 @@ public class NoteOverviewController {
             taskDescriptionArea.setText(task.getTaskDescription());
             importanceChoiceBox.setValue(task.getImportance());
             task.setImportanceString(task.getImportance().getStringValue());
+            colorComboBox.setValue(task.getColorLabel());
         }else{
             taskTitleField.setPromptText("Enter task title");
             taskDescriptionArea.setPromptText("Enter task description");
             importanceChoiceBox.setValue(ImportanceEnum.REGULAR);
+            colorComboBox.setValue(Color.TRANSPARENT);
 
         }
 
@@ -147,6 +157,7 @@ public class NoteOverviewController {
         task.setTaskDescription(taskDescriptionArea.getText());
         task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
         task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
+        task.setColorLabel((Color) colorComboBox.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -249,5 +260,41 @@ public class NoteOverviewController {
                 taskTable.getItems().remove(i);
             }
         }
+    }
+
+
+    /**
+     * Sets values for colorComboBox pop-up and button
+     */
+    private void setColorFillInComboBox (){
+        colorComboBox.getItems().setAll(Color.TRANSPARENT, Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.PURPLE);
+
+        Callback<ListView<Color>, ListCell<Color>> factory = new Callback<ListView<Color>, ListCell<Color>>() {
+            @Override
+            public ListCell<Color> call(ListView<Color> param) {
+                return new ListCell<Color>(){
+                    private final Rectangle rectangle;
+                    {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        rectangle = new Rectangle(35, 15);
+                    }
+                    @Override
+                    protected void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        }else {
+                            rectangle.setFill(item);
+                            setGraphic(rectangle);
+                        }
+                    }
+                };
+            }
+        };
+        colorComboBox.setCellFactory(factory);
+        colorComboBox.setButtonCell(factory.call(null));
+
+
     }
 }
