@@ -1,8 +1,8 @@
 package com.kanvees.desktop.model;
 
+import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
 import javafx.beans.property.*;
-import javafx.scene.paint.Color;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ public class Task {
 
     private final StringProperty taskTitle;
     private final StringProperty taskDescription;
-    private final ObjectProperty<Color> colorLabel;
+    private final ObjectProperty<ColorsEnum> colorLabel;
     private final ObjectProperty<LocalDateTime> endTime;
     private final ObjectProperty<ImportanceEnum> importance;
     private final BooleanProperty isRepetitive;
@@ -33,7 +33,7 @@ public class Task {
         this.taskTitle = new SimpleStringProperty(taskTitle);
         this.taskDescription = new SimpleStringProperty(taskDescription);
 
-        this.colorLabel = new SimpleObjectProperty<Color>(Color.TRANSPARENT);
+        this.colorLabel = new SimpleObjectProperty<ColorsEnum>(ColorsEnum.TRANSPARENT);
         this.endTime = new SimpleObjectProperty<LocalDateTime>(LocalDateTime.of(2015, 03, 31, 22, 00, 00));
         this.importance = new SimpleObjectProperty<>(ImportanceEnum.REGULAR);
 
@@ -77,15 +77,15 @@ public class Task {
     /**
      * color label getter\setter
      */
-    public Color getColorLabel() {
+    public ColorsEnum getColorLabel() {
         return colorLabel.get();
     }
 
-    public ObjectProperty<Color> colorLabelProperty() {
+    public ObjectProperty<ColorsEnum> colorLabelProperty() {
         return colorLabel;
     }
 
-    public void setColorLabel(Color colorLabel) {
+    public void setColorLabel(ColorsEnum colorLabel) {
         this.colorLabel.set(colorLabel);
     }
 

@@ -3,6 +3,7 @@ package com.kanvees.desktop.view;
 import com.kanvees.desktop.InitApp;
 import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
+import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -54,9 +55,6 @@ public class NoteOverviewController {
     @FXML
     private ComboBox colorComboBox;
 
-//    private ImportanceEnum importanceEnum;
-
-
     private InitApp initApp;
 
     /**
@@ -101,7 +99,7 @@ public class NoteOverviewController {
             taskTitleField.setPromptText("Enter task title");
             taskDescriptionArea.setPromptText("Enter task description");
             importanceChoiceBox.setValue(ImportanceEnum.REGULAR);
-            colorComboBox.setValue(Color.TRANSPARENT);
+            colorComboBox.setValue(ColorsEnum.TRANSPARENT);
 
         }
 
@@ -115,6 +113,7 @@ public class NoteOverviewController {
         taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
         taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
         taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
+        setColorCellValues();
 
         showNoteDetails(null);
         showTaskDetails(null);
@@ -157,7 +156,7 @@ public class NoteOverviewController {
         task.setTaskDescription(taskDescriptionArea.getText());
         task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
         task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
-        task.setColorLabel((Color) colorComboBox.getSelectionModel().getSelectedItem());
+        task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -266,26 +265,26 @@ public class NoteOverviewController {
     /**
      * Sets values for colorComboBox pop-up and button
      */
-    private void setColorFillInComboBox (){
-        colorComboBox.getItems().setAll(Color.TRANSPARENT, Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.PURPLE);
+    private void setColorFillInComboBox() {
 
-        Callback<ListView<Color>, ListCell<Color>> factory = new Callback<ListView<Color>, ListCell<Color>>() {
+        colorComboBox.getItems().setAll(ColorsEnum.values());
+        Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>> factory = new Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>>() {
             @Override
-            public ListCell<Color> call(ListView<Color> param) {
-                return new ListCell<Color>(){
+            public ListCell<ColorsEnum> call(ListView<ColorsEnum> param) {
+                return new ListCell<ColorsEnum>(){
                     private final Rectangle rectangle;
                     {
                         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                         rectangle = new Rectangle(35, 15);
                     }
                     @Override
-                    protected void updateItem(Color item, boolean empty) {
+                    protected void updateItem(ColorsEnum item, boolean empty) {
                         super.updateItem(item, empty);
 
                         if (item == null || empty) {
                             setGraphic(null);
                         }else {
-                            rectangle.setFill(item);
+                            rectangle.setFill(Color.web(item.toString()));
                             setGraphic(rectangle);
                         }
                     }
@@ -294,7 +293,27 @@ public class NoteOverviewController {
         };
         colorComboBox.setCellFactory(factory);
         colorComboBox.setButtonCell(factory.call(null));
+    }
 
+//    private void setColorCellValues() {
+//
+//        taskColorLabelColumn.setCellFactory();
+//    }
 
+    private void setColorCellValues() {
+        taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, Color>, TableCell<Task, Color>>() {
+            @Override
+            public TableCell<Task, Color> call(TableColumn<Task, Color> param) {
+                TableCell<Task, Color> cell = new TableCell<Task, Color>() {
+                    Rectangle rectangle = new Rectangle(10,10);
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                            rectangle.setFill(Color.web(taskTable.getItems().get(1).getColorLabel().toString()));
+                            setGraphic(rectangle);
+                    }
+                };
+                return cell;
+            }
+        });
     }
 }
