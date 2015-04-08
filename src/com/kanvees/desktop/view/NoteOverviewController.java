@@ -295,10 +295,6 @@ public class NoteOverviewController {
         colorComboBox.setButtonCell(factory.call(null));
     }
 
-//    private void setColorCellValues() {
-//
-//        taskColorLabelColumn.setCellFactory();
-//    }
 
     private void setColorCellValues() {
         taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, Color>, TableCell<Task, Color>>() {
@@ -308,8 +304,13 @@ public class NoteOverviewController {
                     Rectangle rectangle = new Rectangle(10,10);
                     @Override
                     public void updateItem(Color item, boolean empty) {
-                            rectangle.setFill(Color.web(taskTable.getItems().get(1).getColorLabel().toString()));
-                            setGraphic(rectangle);
+                        super.updateItem(item, empty);
+                        if (empty){
+                            setGraphic(null);
+                        } else {
+                                rectangle.setFill(Color.web(String.valueOf(taskTable.getItems().get(0).getColorLabel().toString())));
+                                setGraphic(rectangle);
+                        }
                     }
                 };
                 return cell;
