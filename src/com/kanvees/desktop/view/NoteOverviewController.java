@@ -7,6 +7,7 @@ import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -45,7 +46,7 @@ public class NoteOverviewController {
     @FXML
     private TableColumn<Task, String> taskImportanceColumn;
     @FXML
-    private TableColumn<Task, Color> taskColorLabelColumn;
+    private TableColumn<Task, ColorsEnum> taskColorLabelColumn;
     @FXML
     private TextField taskTitleField;
     @FXML
@@ -113,6 +114,9 @@ public class NoteOverviewController {
         taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
         taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
         taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
+
+        //defines that value of taskColorLabelColumn will be taken from Model colorLabel property
+        taskColorLabelColumn.setCellValueFactory(new PropertyValueFactory<Task, ColorsEnum>("colorLabel"));
         setColorCellValues();
 
         showNoteDetails(null);
@@ -295,24 +299,27 @@ public class NoteOverviewController {
         colorComboBox.setButtonCell(factory.call(null));
     }
 
-//    private void setColorCellValues() {
-//
-//        taskColorLabelColumn.setCellFactory();
-//    }
 
+    /**
+     * method redefines setCellFactory() for taskColorLabelColumn. Is used in initialize together with setCellValueFactory
+     */
     private void setColorCellValues() {
-        taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, Color>, TableCell<Task, Color>>() {
+        taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, ColorsEnum>, TableCell<Task, ColorsEnum>>() {
             @Override
-            public TableCell<Task, Color> call(TableColumn<Task, Color> param) {
-                TableCell<Task, Color> cell = new TableCell<Task, Color>() {
+            public TableCell<Task, ColorsEnum> call(TableColumn<Task, ColorsEnum> param) {
+                return new TableCell<Task, ColorsEnum>() {
                     Rectangle rectangle = new Rectangle(10,10);
                     @Override
-                    public void updateItem(Color item, boolean empty) {
-                            rectangle.setFill(Color.web(taskTable.getItems().get(1).getColorLabel().toString()));
+                    public void updateItem(ColorsEnum item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty){
+                            setGraphic(null);
+                        } else {
+                            rectangle.setFill(Color.web(item.toString()));
                             setGraphic(rectangle);
+                        }
                     }
                 };
-                return cell;
             }
         });
     }
