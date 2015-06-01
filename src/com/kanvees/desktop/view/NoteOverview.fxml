@@ -41,9 +41,9 @@
                            <content>
                               <TableView fx:id="taskTable" prefHeight="200.0" prefWidth="200.0">
                                 <columns>
-                                    <TableColumn fx:id="taskColorLabelColumn" prefWidth="17.0" />
-                                  <TableColumn fx:id="taskTitleColumn" editable="false" prefWidth="194.0" resizable="false" sortable="false" text="Your Tasks" />
-                                    <TableColumn fx:id="taskImportanceColumn" editable="false" prefWidth="24.0" resizable="false" sortable="false" />
+                                    <TableColumn fx:id="taskColorLabelColumn" prefWidth="17.0" resizable="false" />
+                                  <TableColumn fx:id="taskTitleColumn" editable="false" prefWidth="202.0" resizable="false" sortable="false" text="Your Tasks" />
+                                    <TableColumn fx:id="taskImportanceColumn" editable="false" prefWidth="16.0" resizable="false" sortable="false" />
                                 </columns>
                               </TableView>
                            </content>

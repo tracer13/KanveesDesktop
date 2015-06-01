@@ -2,6 +2,7 @@ package com.kanvees.desktop;
 
 import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
+import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -27,8 +28,8 @@ public class InitApp extends Application {
         noteList.add(new Note ("First Note", "Some test note text"));
         noteList.add(new Note ("Second Note", "Another text to test app"));
 
-        taskList.add(new Task ("First Task", "first task description"));
-        taskList.add(new Task ("Second Task", "second task description"));
+        taskList.add(new Task ("First Task", "first task description", ColorsEnum.BLACK));
+        taskList.add(new Task ("Second Task", "second task description", ColorsEnum.GREEN));
     }
 
     public ObservableList<Note> getNoteList() {return noteList;}
@@ -57,6 +58,7 @@ public class InitApp extends Application {
             rootLayout = (BorderPane) loader.load();
 
             Scene scene = new Scene(rootLayout);
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
 
             primaryStage.show();

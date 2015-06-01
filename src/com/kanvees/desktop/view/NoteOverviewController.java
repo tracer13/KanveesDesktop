@@ -115,7 +115,7 @@ public class NoteOverviewController {
         taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
         taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
 
-        //defines that value of taskColorLabelColumn will be taken from Model colorLabel property
+        //defines that value of taskColorLabelColumn will be taken from Task(model) colorLabel property
         taskColorLabelColumn.setCellValueFactory(new PropertyValueFactory<Task, ColorsEnum>("colorLabel"));
         setColorCellValues();
 
@@ -308,7 +308,7 @@ public class NoteOverviewController {
             @Override
             public TableCell<Task, ColorsEnum> call(TableColumn<Task, ColorsEnum> param) {
                 return new TableCell<Task, ColorsEnum>() {
-                    Rectangle rectangle = new Rectangle(10,10);
+                    Rectangle rectangle = new Rectangle(7,18);
                     @Override
                     public void updateItem(ColorsEnum item, boolean empty) {
                         super.updateItem(item, empty);
