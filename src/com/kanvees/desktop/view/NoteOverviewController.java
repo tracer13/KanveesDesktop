@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
@@ -19,6 +20,9 @@ public class NoteOverviewController {
 
     @FXML
     private TabPane tabPane;
+
+    @FXML
+    private Pane taskPane;
 
     /**
      * Declaring fields for 'Notes'
@@ -55,6 +59,11 @@ public class NoteOverviewController {
     private  ChoiceBox importanceChoiceBox;
     @FXML
     private ComboBox colorComboBox;
+    @FXML
+    private Button closeTaskButton;
+    @FXML
+    private Button reopenTaskButton;
+
 
     private InitApp initApp;
 
@@ -105,6 +114,7 @@ public class NoteOverviewController {
         }
 
         checkEmptyTasks();
+        checkIfTaskIsDone();
     }
 
     @FXML
@@ -323,4 +333,55 @@ public class NoteOverviewController {
             }
         });
     }
+
+    /**
+     * performs a check indicating if task is done or not, disables and enables layers
+     */
+    private void checkIfTaskIsDone() {
+        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Task task = taskTable.getItems().get(selectedIndex);
+            if (task.getIsClosed()) {
+                taskPane.setDisable(true);
+                closeTaskButton.setVisible(false);
+                reopenTaskButton.setVisible(true);
+            }else{
+                taskPane.setDisable(false);
+                closeTaskButton.setVisible(true);
+                reopenTaskButton.setVisible(false);
+            }
+        }
+    }
+
+    /**
+     * handling 'Close Task' button
+     */
+    @FXML
+    private void handleCloseTask() {
+        handleSaveTask();
+
+        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+        Task task = taskTable.getItems().get(selectedIndex);
+
+        task.setIsClosed(true);
+        taskPane.setDisable(true);
+        closeTaskButton.setVisible(false);
+        reopenTaskButton.setVisible(true);
+
+    }
+
+    /**
+     * handling 'Reopen Task' button
+     */
+    @FXML
+    private void handleReopenTask() {
+        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+        Task task = taskTable.getItems().get(selectedIndex);
+
+        task.setIsClosed(false);
+        taskPane.setDisable(false);
+        closeTaskButton.setVisible(true);
+        reopenTaskButton.setVisible(false);
+    }
+
 }
