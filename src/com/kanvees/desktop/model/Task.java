@@ -14,6 +14,7 @@ public class Task {
     private final ObjectProperty<LocalDateTime> endTime;
     private final ObjectProperty<ImportanceEnum> importance;
     private final BooleanProperty isRepetitive;
+    private final BooleanProperty isClosed;
 
     private final StringProperty importanceString;
 
@@ -38,6 +39,8 @@ public class Task {
         this.importance = new SimpleObjectProperty<ImportanceEnum>(ImportanceEnum.REGULAR);
 
         this.isRepetitive = new SimpleBooleanProperty(false);
+
+        this.isClosed = new SimpleBooleanProperty(false);
 
         this.importanceString = new SimpleStringProperty("");
     }
@@ -133,6 +136,21 @@ public class Task {
 
     public void setIsRepetitive(boolean isRepetitive) {
         this.isRepetitive.set(isRepetitive);
+    }
+
+    /**
+     * isClosed bool getter/setter
+     */
+    public boolean getIsClosed() {
+        return isClosed.get();
+    }
+
+    public BooleanProperty isClosedProperty() {
+        return isClosed;
+    }
+
+    public void setIsClosed(boolean isClosed) {
+        this.isClosed.set(isClosed);
     }
 
 
