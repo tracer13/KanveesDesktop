@@ -28,8 +28,8 @@ public class InitApp extends Application {
         noteList.add(new Note ("First Note", "Some test note text"));
         noteList.add(new Note ("Second Note", "Another text to test app"));
 
-        taskList.add(new Task ("First Task", "first task description", ColorsEnum.BLACK));
-        taskList.add(new Task ("Second Task", "second task description", ColorsEnum.GREEN));
+        taskList.add(new Task ("First Task", "first task description"));
+        taskList.add(new Task ("Second Task", "second task description"));
     }
 
     public ObservableList<Note> getNoteList() {return noteList;}
@@ -53,7 +53,7 @@ public class InitApp extends Application {
 
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(InitApp.class.getResource("view/BasicRootLayout.fxml"));
+            loader.setLocation(InitApp.class.getResource("/BasicRootLayout.fxml"));
 
             rootLayout = (BorderPane) loader.load();
 
@@ -74,7 +74,7 @@ public class InitApp extends Application {
 
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(InitApp.class.getResource("view/NoteOverview.fxml"));
+            loader.setLocation(InitApp.class.getResource("/NoteOverview.fxml"));
 
             AnchorPane noteOverview = (AnchorPane) loader.load();
 
