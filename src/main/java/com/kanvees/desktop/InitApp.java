@@ -53,7 +53,7 @@ public class InitApp extends Application {
 
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(InitApp.class.getResource("view/BasicRootLayout.fxml"));
+            loader.setLocation(InitApp.class.getResource("/BasicRootLayout.fxml"));
 
             rootLayout = (BorderPane) loader.load();
 
@@ -74,7 +74,7 @@ public class InitApp extends Application {
 
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(InitApp.class.getResource("view/NoteOverview.fxml"));
+            loader.setLocation(InitApp.class.getResource("/NoteOverview.fxml"));
 
             AnchorPane noteOverview = (AnchorPane) loader.load();
 
