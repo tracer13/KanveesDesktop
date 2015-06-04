@@ -25,5 +25,8 @@
         <module name="KanveesDesktop" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="KanveesDesktop" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
