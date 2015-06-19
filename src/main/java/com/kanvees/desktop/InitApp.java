@@ -2,7 +2,6 @@ package com.kanvees.desktop;
 
 import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
-import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
