@@ -22,7 +22,7 @@ public class Task {
      * Default constructor
      */
     public Task () {
-        this (null, null, null);
+        this (null, null);
     }
 
     /**
@@ -30,11 +30,11 @@ public class Task {
      * @param taskTitle
      * @param taskDescription
      */
-    public Task(String taskTitle, String taskDescription, ColorsEnum colorLabel) {
+    public Task(String taskTitle, String taskDescription) {
         this.taskTitle = new SimpleStringProperty(taskTitle);
         this.taskDescription = new SimpleStringProperty(taskDescription);
 
-        this.colorLabel = new SimpleObjectProperty<ColorsEnum>(colorLabel);
+        this.colorLabel = new SimpleObjectProperty<ColorsEnum>(ColorsEnum.TRANSPARENT);
         this.endTime = new SimpleObjectProperty<LocalDateTime>(LocalDateTime.of(2015, 03, 31, 22, 00, 00));
         this.importance = new SimpleObjectProperty<ImportanceEnum>(ImportanceEnum.REGULAR);
 

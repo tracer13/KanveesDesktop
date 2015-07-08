@@ -5,6 +5,7 @@ import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
 import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -56,7 +57,7 @@ public class NoteOverviewController {
     @FXML
     private TextArea taskDescriptionArea;
     @FXML
-    private  ChoiceBox importanceChoiceBox;
+    private ChoiceBox importanceChoiceBox;
     @FXML
     private ComboBox colorComboBox;
     @FXML
@@ -322,7 +323,7 @@ public class NoteOverviewController {
                     @Override
                     public void updateItem(ColorsEnum item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty){
+                        if (item == null || empty){
                             setGraphic(null);
                         } else {
                             rectangle.setFill(Color.web(item.toString()));
@@ -333,6 +334,22 @@ public class NoteOverviewController {
             }
         });
     }
+
+
+    /**
+     * method sets a cell factory for task title column
+     */
+    public void setup() {
+        PseudoClass open = PseudoClass.getPseudoClass("open");
+        PseudoClass closed = PseudoClass.getPseudoClass("closed");
+
+        taskTitleColumn.setCellFactory(tableCell -> {
+            TableCell<Task,String> cell = new TableCell<>();
+//            ChangeListener<boolean>
+            return null;
+        });
+    }
+
 
     /**
      * performs a check indicating if task is done or not, disables and enables layers

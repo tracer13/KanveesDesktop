@@ -19,3 +19,10 @@
     -fx-pref-width: 50;
     -fx-pref-height: 150;
 }
+/*Pseudo classes 'open', 'closed'*/
+.table-row-cell:open {
+    -fx-stroke: transparent;
+}
+.table-row-cell:closed {
+    -fx-stroke: black;
+}
