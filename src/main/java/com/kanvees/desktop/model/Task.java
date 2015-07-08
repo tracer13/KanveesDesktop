@@ -35,7 +35,7 @@ public class Task {
         this.taskDescription = new SimpleStringProperty(taskDescription);
 
         this.colorLabel = new SimpleObjectProperty<ColorsEnum>(ColorsEnum.TRANSPARENT);
-        this.endTime = new SimpleObjectProperty<LocalDateTime>(LocalDateTime.of(2015, 03, 31, 22, 00, 00));
+        this.endTime = new SimpleObjectProperty<LocalDateTime>(null);
         this.importance = new SimpleObjectProperty<ImportanceEnum>(ImportanceEnum.REGULAR);
 
         this.isRepetitive = new SimpleBooleanProperty(false);

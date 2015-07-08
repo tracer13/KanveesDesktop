@@ -1,9 +1,8 @@
 package com.kanvees.desktop;
 
+import com.kanvees.desktop.model.ItemListWrapper;
 import com.kanvees.desktop.model.Note;
-import com.kanvees.desktop.model.NoteListWrapper;
 import com.kanvees.desktop.model.Task;
-import com.kanvees.desktop.model.TaskListWrapper;
 import com.kanvees.desktop.view.BasicRootLayoutController;
 import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
@@ -143,26 +142,18 @@ public class InitApp extends Application {
     public void loadUserDataFromFile(File file){
 
         try{
-            JAXBContext noteContext = JAXBContext
-                    .newInstance(NoteListWrapper.class);
+            JAXBContext appContext = JAXBContext
+                    .newInstance(ItemListWrapper.class);
 
-            Unmarshaller noteUnmarshaller = noteContext.createUnmarshaller();
+            Unmarshaller itemUnmarshaller = appContext.createUnmarshaller();
 
-            NoteListWrapper noteListWrapper = (NoteListWrapper) noteUnmarshaller.unmarshal(file);
+            ItemListWrapper itemListWrapper = (ItemListWrapper) itemUnmarshaller.unmarshal(file);
 
             noteList.clear();
-            noteList.addAll(noteListWrapper.getNoteList());
-
-
-            JAXBContext taskContext = JAXBContext
-                    .newInstance(TaskListWrapper.class);
-
-            Unmarshaller taskUnmarshaller = taskContext.createUnmarshaller();
-
-            TaskListWrapper taskListWrapper = (TaskListWrapper) taskUnmarshaller.unmarshal(file);
-
+            noteList.addAll(itemListWrapper.getNoteList());
             taskList.clear();
-            taskList.addAll(taskListWrapper.getTaskList());
+            taskList.addAll(itemListWrapper.getTaskList());
+
 
             setFilePathForUser(file);
 
@@ -181,30 +172,19 @@ public class InitApp extends Application {
     public void saveUserDataToFile(File file){
 
         try{
-            JAXBContext noteContext = JAXBContext
-                    .newInstance(NoteListWrapper.class);
+            JAXBContext appContext = JAXBContext
+                    .newInstance(ItemListWrapper.class);
 
-            Marshaller noteMarshaller = noteContext.createMarshaller();
+            Marshaller itemMarshaller = appContext.createMarshaller();
 
-            noteMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            itemMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            NoteListWrapper noteListWrapper = new NoteListWrapper();
-            noteListWrapper.setNoteList(noteList);
+            ItemListWrapper itemListWrapper = new ItemListWrapper();
+            itemListWrapper.setNoteList(noteList);
+            itemListWrapper.setTaskList(taskList);
 
-            noteMarshaller.marshal(noteListWrapper, file);
+            itemMarshaller.marshal(itemListWrapper, file);
 
-
-            JAXBContext taskContext = JAXBContext
-                    .newInstance(TaskListWrapper.class);
-
-            Marshaller taskMarshaller = taskContext.createMarshaller();
-
-            taskMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-            TaskListWrapper taskListWrapper = new TaskListWrapper();
-            taskListWrapper.setTaskList(taskList);
-
-            taskMarshaller.marshal(taskListWrapper, file);
 
             setFilePathForUser(file);
 
