@@ -5,10 +5,8 @@ import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
 import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
-import javafx.beans.value.ChangeListener;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -325,7 +323,7 @@ public class NoteOverviewController {
                     @Override
                     public void updateItem(ColorsEnum item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty){
+                        if (item == null || empty){
                             setGraphic(null);
                         } else {
                             rectangle.setFill(Color.web(item.toString()));
