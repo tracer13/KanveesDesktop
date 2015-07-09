@@ -18,7 +18,6 @@ import org.controlsfx.dialog.Dialogs;
 
 public class NoteOverviewController {
 
-
     @FXML
     private TabPane tabPane;
 
@@ -400,5 +399,4 @@ public class NoteOverviewController {
         closeTaskButton.setVisible(true);
         reopenTaskButton.setVisible(false);
     }
-
 }

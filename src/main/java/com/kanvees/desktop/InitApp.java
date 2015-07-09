@@ -33,11 +33,6 @@ public class InitApp extends Application {
 
 
     public InitApp(){
-        noteList.add(new Note ("First Note", "Some test note text"));
-        noteList.add(new Note ("Second Note", "Another text to test app"));
-
-        taskList.add(new Task ("First Task", "first task description"));
-        taskList.add(new Task ("Second Task", "second task description"));
     }
 
     public ObservableList<Note> getNoteList() {return noteList;}
@@ -74,6 +69,11 @@ public class InitApp extends Application {
             primaryStage.show();
         }catch (IOException e){
             e.printStackTrace();
+        }
+
+        File file = getFilePathForUser();
+        if (file != null){
+            loadUserDataFromFile(file);
         }
     }
 
