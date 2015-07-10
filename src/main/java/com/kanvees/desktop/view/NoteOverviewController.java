@@ -5,6 +5,8 @@ import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
 import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -91,14 +93,14 @@ public class NoteOverviewController {
                 (observable, oldValue, newValue) -> showNoteDetails(newValue));
         taskTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showTaskDetails(newValue));
+
+        tabChangeListener();
     }
 
     /**
      * shows details of an existing or new note
      */
     private void showNoteDetails(Note note){
-
-        selectionRemover();
 
         if (note != null){
             taskAnchorPane.setVisible(false);
@@ -115,8 +117,6 @@ public class NoteOverviewController {
     }
 
     private void showTaskDetails(Task task){
-
-        selectionRemover();
 
         importanceChoiceBox.getItems().setAll(ImportanceEnum.values());
         setColorFillInComboBox();
@@ -146,6 +146,31 @@ public class NoteOverviewController {
 
         noteTable.setItems(initApp.getNoteList());
         taskTable.setItems(initApp.getTaskList());
+    }
+
+    /**
+     * changes tabPane listener. When switching between tabs, content is cleared.
+     */
+    @SuppressWarnings("deprecation")
+    private void tabChangeListener(){
+        tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (tabPane.getSelectionModel().getSelectedIndex()==0){
+                    taskAnchorPane.setVisible(false);
+                    selectionRemover();
+                }else if (tabPane.getSelectionModel().getSelectedIndex()==1){
+                    noteAnchorPane.setVisible(false);
+                    selectionRemover();
+                }else if (tabPane.getSelectionModel().getSelectedIndex()==2){
+                    Dialogs.create()
+                            .title("Notification")
+                            .masthead("This function is currently under development")
+                            .showInformation();
+                    tabPane.getSelectionModel().selectFirst();
+                }
+            }
+        });
     }
 
     /**
@@ -272,27 +297,43 @@ public class NoteOverviewController {
      * Handling 'Save' button (saves changes to selected NOTE)
      */
     @FXML
+    @SuppressWarnings("deprecation")
     private void handleSaveNote(){
         int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
         Note note = noteTable.getItems().get(selectedIndex);
 
-        note.setNoteTitle(noteTitleField.getText());
-        note.setNoteBody(noteBodyArea.getText());
+        if (noteTitleField.getText()==null || noteTitleField.getText().isEmpty()){
+            Dialogs.create()
+                    .title("Information")
+                    .masthead("Please fill in note title")
+                    .showInformation();
+        }else{
+            note.setNoteTitle(noteTitleField.getText());
+            note.setNoteBody(noteBodyArea.getText());
+        }
     }
 
     /**
      * Handling 'Save' button (saves changes to selected TASK)
      */
     @FXML
+    @SuppressWarnings("deprecation")
     private void handleSaveTask(){
         int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
         Task task = taskTable.getItems().get(selectedIndex);
 
-        task.setTaskTitle(taskTitleField.getText());
-        task.setTaskDescription(taskDescriptionArea.getText());
-        task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
-        task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
-        task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
+        if (taskTitleField.getText()==null || taskTitleField.getText().isEmpty()){
+            Dialogs.create()
+                    .title("Information")
+                    .masthead("Please fill in task title")
+                    .showInformation();
+        }else {
+            task.setTaskTitle(taskTitleField.getText());
+            task.setTaskDescription(taskDescriptionArea.getText());
+            task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
+            task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
+            task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
+        }
     }
 
     /**
@@ -310,7 +351,7 @@ public class NoteOverviewController {
                         .title("Error")
                         .masthead("Note is not selected")
                         .message("Please select a note to delete")
-                        .showWarning();
+                        .showInformation();
             }
         } else if (tabPane.getSelectionModel().isSelected(1)){
             int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
@@ -321,7 +362,7 @@ public class NoteOverviewController {
                         .title("Error")
                         .masthead("Task is not selected")
                         .message("Please select a task to delete")
-                        .showWarning();
+                        .showInformation();
             }
         }
     }

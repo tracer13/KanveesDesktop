@@ -8,12 +8,13 @@ import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.controlsfx.dialog.Dialogs;
 
 import javax.xml.bind.JAXBContext;
@@ -27,6 +28,7 @@ public class InitApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private BasicRootLayoutController basicRootLayoutController;
 
     private ObservableList<Note> noteList = FXCollections.observableArrayList();
     private ObservableList<Task> taskList = FXCollections.observableArrayList();
@@ -41,12 +43,14 @@ public class InitApp extends Application {
     @Override
     public void start(Stage primaryStage){
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Kanvees Desktop");
-        this.primaryStage.getIcons().add(new Image(String.valueOf(InitApp.class.getResource("/images/k_icon.png"))));
+        this.primaryStage.setTitle("Kanvees");
+//        this.primaryStage.getIcons().add(new Image(String.valueOf(InitApp.class.getResource("/images/k_icon.png"))));
 
         initRootLayout();
 
         showNoteOverview();
+
+        saveUserDataWhenAppIsClosed();
     }
 
     /**
@@ -72,10 +76,10 @@ public class InitApp extends Application {
             e.printStackTrace();
         }
 
-//        File file = getFilePathForUser();
-//        if (file != null){
-//            loadUserDataFromFile(file);
-//        }
+        File file = getFilePathForUser();
+        if (file != null){
+            loadUserDataFromFile(file);
+        }
     }
 
     /**
@@ -128,11 +132,11 @@ public class InitApp extends Application {
         if (file != null){
             prefs.put("filePath", file.getPath());
 
-            primaryStage.setTitle("Kanvees Desktop" + file.getName());
+            primaryStage.setTitle("Kanvees - " + file.getName());
         }else{
             prefs.remove("filePath");
 
-            primaryStage.setTitle("Kanvees Desktop");
+            primaryStage.setTitle("Kanvees");
         }
     }
 
@@ -151,18 +155,22 @@ public class InitApp extends Application {
             ItemListWrapper itemListWrapper = (ItemListWrapper) itemUnmarshaller.unmarshal(file);
 
             noteList.clear();
-            noteList.addAll(itemListWrapper.getNoteList());
-            taskList.clear();
-            taskList.addAll(itemListWrapper.getTaskList());
+            try {
+                noteList.addAll(itemListWrapper.getNoteList());
+            } catch (NullPointerException e) {}
 
+            taskList.clear();
+            try{
+                taskList.addAll(itemListWrapper.getTaskList());
+            } catch (NullPointerException e){}
 
             setFilePathForUser(file);
 
         } catch (Exception e) {
             Dialogs.create()
                     .title("Error")
-                    .masthead("Could not load data from file: " + file.getPath());
-            e.printStackTrace();
+                    .masthead("Could not find last saved file: " + file.getPath())
+                    .showInformation();
         }
     }
 
@@ -192,9 +200,23 @@ public class InitApp extends Application {
         } catch (Exception e) {
             Dialogs.create()
                     .title("Error")
-                    .masthead("Could not save data to file: " + file.getPath());
-            e.printStackTrace();
+                    .masthead("Could not save data to file: " + file.getPath())
+                    .showInformation();
         }
+    }
+
+    private void saveUserDataWhenAppIsClosed(){
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                File userFile = getFilePathForUser();
+
+                if (userFile != null){
+                    saveUserDataToFile(userFile);
+                }else{
+                    basicRootLayoutController.handleSaveAs();
+                }
+            }
+        });
     }
 
 }

@@ -35,7 +35,7 @@ public class BasicRootLayoutController {
         FileChooser fileChooser = new FileChooser();
 
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(
-                "XML files (*.xml)", "*.xml");
+                "Kanvees files (*.kvd)", "*.kvd");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File file = fileChooser.showOpenDialog(initApp.getPrimaryStage());
@@ -65,19 +65,19 @@ public class BasicRootLayoutController {
      * Handling 'File' -> 'Save As...' button
      */
     @FXML
-    private void handleSaveAs(){
+    public void handleSaveAs(){
 
         FileChooser fileChooser = new FileChooser();
 
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(
-                "XML files (*.xml)", "*.xml");
+                "Kanvees files (*.kvd)", "*.kvd");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File file = fileChooser.showSaveDialog(initApp.getPrimaryStage());
 
         if (file != null){
-            if (!file.getPath().endsWith(".xml")){
-                file  = new File(file.getPath() + ".xml");
+            if (!file.getPath().endsWith(".kvd")){
+                file  = new File(file.getPath() + ".kvd");
             }
             initApp.saveUserDataToFile(file);
         }
@@ -88,7 +88,7 @@ public class BasicRootLayoutController {
      */
     @FXML
     private void handleExit(){
+        handleSave();
         System.exit(0);
     }
-
 }
