@@ -71,7 +71,7 @@
                         <Button layoutX="484.0" layoutY="305.0" mnemonicParsing="false" onAction="#handleSaveNote" text="Save" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="484.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="305.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="taskAnchorPane" prefHeight="373.0" prefWidth="556.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="taskAnchorPane" prefHeight="373.0" prefWidth="556.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Pane fx:id="taskPane" layoutX="14.0" layoutY="14.0">
                            <children>

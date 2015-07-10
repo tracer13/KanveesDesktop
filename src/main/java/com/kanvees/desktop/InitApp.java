@@ -10,13 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
@@ -33,20 +33,16 @@ public class InitApp extends Application {
 
 
     public InitApp(){
-        noteList.add(new Note ("First Note", "Some test note text"));
-        noteList.add(new Note ("Second Note", "Another text to test app"));
-
-        taskList.add(new Task ("First Task", "first task description"));
-        taskList.add(new Task ("Second Task", "second task description"));
     }
 
     public ObservableList<Note> getNoteList() {return noteList;}
     public ObservableList<Task> getTaskList() {return taskList;}
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage){
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Kanvees Desktop");
+        this.primaryStage.getIcons().add(new Image(String.valueOf(InitApp.class.getResource("/images/k_icon.png"))));
 
         initRootLayout();
 
@@ -56,7 +52,7 @@ public class InitApp extends Application {
     /**
      * Calls the 'Root Layout' layer
      */
-    public void initRootLayout() {
+    public void initRootLayout(){
 
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -75,6 +71,11 @@ public class InitApp extends Application {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+//        File file = getFilePathForUser();
+//        if (file != null){
+//            loadUserDataFromFile(file);
+//        }
     }
 
     /**
@@ -157,7 +158,7 @@ public class InitApp extends Application {
 
             setFilePathForUser(file);
 
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             Dialogs.create()
                     .title("Error")
                     .masthead("Could not load data from file: " + file.getPath());
@@ -188,7 +189,7 @@ public class InitApp extends Application {
 
             setFilePathForUser(file);
 
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             Dialogs.create()
                     .title("Error")
                     .masthead("Could not save data to file: " + file.getPath());
