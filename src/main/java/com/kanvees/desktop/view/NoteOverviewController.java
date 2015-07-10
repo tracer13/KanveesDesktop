@@ -5,7 +5,6 @@ import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
 import com.kanvees.desktop.model.enums.ColorsEnum;
 import com.kanvees.desktop.model.enums.ImportanceEnum;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -73,10 +72,33 @@ public class NoteOverviewController {
     public NoteOverviewController() {
     }
 
+    @FXML
+    private void initialize(){
+
+        noteTitleColumn.setCellValueFactory(cellData -> cellData.getValue().noteTitleProperty());
+        taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
+        taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
+        taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
+
+        //defines that value of taskColorLabelColumn will be taken from Task(model) colorLabel property
+        taskColorLabelColumn.setCellValueFactory(new PropertyValueFactory<Task, ColorsEnum>("colorLabel"));
+        setColorCellValues();
+
+        showNoteDetails(null);
+        showTaskDetails(null);
+
+        noteTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showNoteDetails(newValue));
+        taskTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showTaskDetails(newValue));
+    }
+
     /**
      * shows details of an existing or new note
      */
     private void showNoteDetails(Note note){
+
+        selectionRemover();
 
         if (note != null){
             taskAnchorPane.setVisible(false);
@@ -93,6 +115,8 @@ public class NoteOverviewController {
     }
 
     private void showTaskDetails(Task task){
+
+        selectionRemover();
 
         importanceChoiceBox.getItems().setAll(ImportanceEnum.values());
         setColorFillInComboBox();
@@ -117,27 +141,6 @@ public class NoteOverviewController {
         checkIfTaskIsDone();
     }
 
-    @FXML
-    private void initialize(){
-
-        noteTitleColumn.setCellValueFactory(cellData -> cellData.getValue().noteTitleProperty());
-        taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
-        taskImportanceColumn.setCellValueFactory(cellData -> cellData.getValue().importanceStringProperty());
-        taskImportanceColumn.setStyle("-fx-alignment: center; -fx-text-fill: red; -fx-font-weight: bold");
-
-        //defines that value of taskColorLabelColumn will be taken from Task(model) colorLabel property
-        taskColorLabelColumn.setCellValueFactory(new PropertyValueFactory<Task, ColorsEnum>("colorLabel"));
-        setColorCellValues();
-
-        showNoteDetails(null);
-        showTaskDetails(null);
-
-        noteTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showNoteDetails(newValue));
-        taskTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showTaskDetails(newValue));
-    }
-
     public void setInitApp (InitApp initApp){
         this.initApp = initApp;
 
@@ -145,6 +148,125 @@ public class NoteOverviewController {
         taskTable.setItems(initApp.getTaskList());
     }
 
+    /**
+     * removes selection from currently unused tabs
+     */
+    private void selectionRemover(){
+        if(tabPane.getSelectionModel().getSelectedIndex()==0 && !taskTable.getSelectionModel().isEmpty()){
+            taskTable.getSelectionModel().clearSelection();
+        }else if(tabPane.getSelectionModel().getSelectedIndex()==1 && !noteTable.getSelectionModel().isEmpty()){
+            noteTable.getSelectionModel().clearSelection();
+        }
+    }
+
+    /**
+     * Performs check if there are null empty tasks (title and description null or empty)
+     * is used in showTaskDetails()
+     */
+    private void checkEmptyTasks(){
+        for (int i = 0; i <= taskTable.getItems().size()-1; i++){
+            if (taskTable.getSelectionModel().getSelectedIndex() != i &&
+                    (taskTable.getItems().get(i).getTaskTitle() == null || taskTable.getItems().get(i).getTaskTitle().isEmpty()) &&
+                    (taskTable.getItems().get(i).getTaskDescription() == null || taskTable.getItems().get(i).getTaskDescription().isEmpty())){
+
+                taskTable.getItems().remove(i);
+            }
+        }
+    }
+
+
+    /**
+     * Performs check if there are null or empty notes (title and description null or empty)
+     * is used in showNoteDetails()
+     */
+    private void checkEmptyNotes(){
+        for (int i = 0; i <= noteTable.getItems().size()-1; i++) {
+            if (noteTable.getSelectionModel().getSelectedIndex() != i &&
+                    (noteTable.getItems().get(i).getNoteTitle() == null || noteTable.getItems().get(i).getNoteTitle().isEmpty()) &&
+                    (noteTable.getItems().get(i).getNoteBody() == null || noteTable.getItems().get(i).getNoteBody().isEmpty())) {
+
+                noteTable.getItems().remove(i);
+            }
+        }
+    }
+
+    /**
+     * Sets values for colorComboBox pop-up and button
+     */
+    private void setColorFillInComboBox() {
+
+        colorComboBox.getItems().setAll(ColorsEnum.values());
+        Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>> factory = new Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>>() {
+            @Override
+            public ListCell<ColorsEnum> call(ListView<ColorsEnum> param) {
+                return new ListCell<ColorsEnum>(){
+                    private final Rectangle rectangle;
+                    {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        rectangle = new Rectangle(35, 15);
+                    }
+                    @Override
+                    protected void updateItem(ColorsEnum item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        }else {
+                            rectangle.setFill(Color.web(item.toString()));
+                            setGraphic(rectangle);
+                        }
+                    }
+                };
+            }
+        };
+        colorComboBox.setCellFactory(factory);
+        colorComboBox.setButtonCell(factory.call(null));
+    }
+
+
+    /**
+     * method redefines setCellFactory() for taskColorLabelColumn. Is used in initialize together with setCellValueFactory
+     */
+    private void setColorCellValues() {
+        taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, ColorsEnum>, TableCell<Task, ColorsEnum>>() {
+            @Override
+            public TableCell<Task, ColorsEnum> call(TableColumn<Task, ColorsEnum> param) {
+                return new TableCell<Task, ColorsEnum>() {
+                    Rectangle rectangle = new Rectangle(7,18);
+                    @Override
+                    public void updateItem(ColorsEnum item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty){
+                            setGraphic(null);
+                        } else {
+                            rectangle.setFill(Color.web(item.toString()));
+                            setGraphic(rectangle);
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+
+    /**
+     * performs a check indicating if task is done or not, disables and enables layers
+     */
+    private void checkIfTaskIsDone() {
+        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Task task = taskTable.getItems().get(selectedIndex);
+            if (task.getIsClosed()) {
+                taskPane.setDisable(true);
+                closeTaskButton.setVisible(false);
+                reopenTaskButton.setVisible(true);
+            }else{
+                taskPane.setDisable(false);
+                closeTaskButton.setVisible(true);
+                reopenTaskButton.setVisible(false);
+            }
+        }
+    }
 
     /**
      * Handling 'Save' button (saves changes to selected NOTE)
@@ -244,131 +366,6 @@ public class NoteOverviewController {
                 .showInformation();
     }
 
-
-    /**
-     * Performs check if there are null or empty notes (title and description null or empty)
-     * is used in showNoteDetails()
-     */
-    private void checkEmptyNotes(){
-        for (int i = 0; i <= noteTable.getItems().size()-1; i++) {
-            if (noteTable.getSelectionModel().getSelectedIndex() != i &&
-                    (noteTable.getItems().get(i).getNoteTitle() == null || noteTable.getItems().get(i).getNoteTitle().isEmpty()) &&
-                    (noteTable.getItems().get(i).getNoteBody() == null || noteTable.getItems().get(i).getNoteBody().isEmpty())) {
-
-                noteTable.getItems().remove(i);
-            }
-        }
-    }
-
-    /**
-     * Performs check if there are null empty tasks (title and description null or empty)
-     * is used in showTaskDetails()
-     */
-    private void checkEmptyTasks(){
-        for (int i = 0; i <= taskTable.getItems().size()-1; i++){
-            if (taskTable.getSelectionModel().getSelectedIndex() != i &&
-                    (taskTable.getItems().get(i).getTaskTitle() == null || taskTable.getItems().get(i).getTaskTitle().isEmpty()) &&
-                    (taskTable.getItems().get(i).getTaskDescription() == null || taskTable.getItems().get(i).getTaskDescription().isEmpty())){
-
-                taskTable.getItems().remove(i);
-            }
-        }
-    }
-
-
-    /**
-     * Sets values for colorComboBox pop-up and button
-     */
-    private void setColorFillInComboBox() {
-
-        colorComboBox.getItems().setAll(ColorsEnum.values());
-        Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>> factory = new Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>>() {
-            @Override
-            public ListCell<ColorsEnum> call(ListView<ColorsEnum> param) {
-                return new ListCell<ColorsEnum>(){
-                    private final Rectangle rectangle;
-                    {
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        rectangle = new Rectangle(35, 15);
-                    }
-                    @Override
-                    protected void updateItem(ColorsEnum item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        }else {
-                            rectangle.setFill(Color.web(item.toString()));
-                            setGraphic(rectangle);
-                        }
-                    }
-                };
-            }
-        };
-        colorComboBox.setCellFactory(factory);
-        colorComboBox.setButtonCell(factory.call(null));
-    }
-
-
-    /**
-     * method redefines setCellFactory() for taskColorLabelColumn. Is used in initialize together with setCellValueFactory
-     */
-    private void setColorCellValues() {
-        taskColorLabelColumn.setCellFactory(new Callback<TableColumn<Task, ColorsEnum>, TableCell<Task, ColorsEnum>>() {
-            @Override
-            public TableCell<Task, ColorsEnum> call(TableColumn<Task, ColorsEnum> param) {
-                return new TableCell<Task, ColorsEnum>() {
-                    Rectangle rectangle = new Rectangle(7,18);
-                    @Override
-                    public void updateItem(ColorsEnum item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty){
-                            setGraphic(null);
-                        } else {
-                            rectangle.setFill(Color.web(item.toString()));
-                            setGraphic(rectangle);
-                        }
-                    }
-                };
-            }
-        });
-    }
-
-
-    /**
-     * method sets a cell factory for task title column
-     */
-    public void setup() {
-        PseudoClass open = PseudoClass.getPseudoClass("open");
-        PseudoClass closed = PseudoClass.getPseudoClass("closed");
-
-        taskTitleColumn.setCellFactory(tableCell -> {
-            TableCell<Task,String> cell = new TableCell<>();
-//            ChangeListener<boolean>
-            return null;
-        });
-    }
-
-
-    /**
-     * performs a check indicating if task is done or not, disables and enables layers
-     */
-    private void checkIfTaskIsDone() {
-        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Task task = taskTable.getItems().get(selectedIndex);
-            if (task.getIsClosed()) {
-                taskPane.setDisable(true);
-                closeTaskButton.setVisible(false);
-                reopenTaskButton.setVisible(true);
-            }else{
-                taskPane.setDisable(false);
-                closeTaskButton.setVisible(true);
-                reopenTaskButton.setVisible(false);
-            }
-        }
-    }
-
     /**
      * handling 'Close Task' button
      */
@@ -399,4 +396,5 @@ public class NoteOverviewController {
         closeTaskButton.setVisible(true);
         reopenTaskButton.setVisible(false);
     }
+
 }
