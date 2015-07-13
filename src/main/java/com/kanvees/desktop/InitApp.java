@@ -11,10 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
 import javax.xml.bind.JAXBContext;
@@ -44,7 +48,7 @@ public class InitApp extends Application {
     public void start(Stage primaryStage){
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Kanvees");
-//        this.primaryStage.getIcons().add(new Image(String.valueOf(InitApp.class.getResource("/images/k_icon.png"))));
+        this.primaryStage.getIcons().add(new Image(String.valueOf(InitApp.class.getResource("/images/k_icon.png"))));
 
         initRootLayout();
 
@@ -205,16 +209,42 @@ public class InitApp extends Application {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void saveUserDataWhenAppIsClosed(){
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                File userFile = getFilePathForUser();
 
-                if (userFile != null){
-                    saveUserDataToFile(userFile);
-                }else{
-                    basicRootLayoutController.handleSaveAs();
+                Action confirmation = Dialogs.create()
+                        .title("Confirm save")
+                        .masthead("Would you like to save changes?")
+                        .showConfirm();
+                if (confirmation == Dialog.ACTION_YES) {
+                    File userFile = getFilePathForUser();
+
+                    if (userFile.exists()) {
+                        saveUserDataToFile(userFile);
+                    }else{
+                        FileChooser fileChooser = new FileChooser();
+
+                        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(
+                                "Kanvees files (*.kvd)", "*.kvd");
+                        fileChooser.getExtensionFilters().add(extensionFilter);
+
+                        File file = fileChooser.showSaveDialog(getPrimaryStage());
+
+                        if (file != null){
+                            if (!file.getPath().endsWith(".kvd")){
+                                file  = new File(file.getPath() + ".kvd");
+                            }
+                            saveUserDataToFile(file);
+                        }
+                    }
+                } else if (confirmation == Dialog.ACTION_NO){
+                    System.exit(0);
+                } else{
+                    we.consume();
                 }
+
             }
         });
     }
