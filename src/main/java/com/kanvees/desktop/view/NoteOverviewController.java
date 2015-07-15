@@ -156,13 +156,13 @@ public class NoteOverviewController {
         tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (tabPane.getSelectionModel().getSelectedIndex()==0){
+                if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
                     taskAnchorPane.setVisible(false);
                     selectionRemover();
-                }else if (tabPane.getSelectionModel().getSelectedIndex()==1){
+                } else if (tabPane.getSelectionModel().getSelectedIndex() == 1) {
                     noteAnchorPane.setVisible(false);
                     selectionRemover();
-                }else if (tabPane.getSelectionModel().getSelectedIndex()==2){
+                } else if (tabPane.getSelectionModel().getSelectedIndex() == 2) {
                     Dialogs.create()
                             .title("Notification")
                             .masthead("This function is currently under development")
@@ -310,6 +310,10 @@ public class NoteOverviewController {
         }else{
             note.setNoteTitle(noteTitleField.getText());
             note.setNoteBody(noteBodyArea.getText());
+            Dialogs.create()
+                    .title("Information")
+                    .masthead("Note has been saved!")
+                    .showInformation();
         }
     }
 
@@ -333,6 +337,10 @@ public class NoteOverviewController {
             task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
             task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
             task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
+            Dialogs.create()
+                    .title("Information")
+                    .masthead("Task has been saved!")
+                    .showInformation();
         }
     }
 
@@ -348,7 +356,7 @@ public class NoteOverviewController {
                 noteTable.getItems().remove(selectedIndex);
             }else{
                 Dialogs.create()
-                        .title("Error")
+                        .title("Information")
                         .masthead("Note is not selected")
                         .message("Please select a note to delete")
                         .showInformation();
@@ -359,7 +367,7 @@ public class NoteOverviewController {
                 taskTable.getItems().remove(selectedIndex);
             }else{
                 Dialogs.create()
-                        .title("Error")
+                        .title("Information")
                         .masthead("Task is not selected")
                         .message("Please select a task to delete")
                         .showInformation();

@@ -69,7 +69,8 @@ public class InitApp extends Application {
             rootLayout = (BorderPane) loader.load();
 
             Scene scene = new Scene(rootLayout);
-            primaryStage.setResizable(false);
+            primaryStage.setMinHeight(450);
+            primaryStage.setMinWidth(818);
             primaryStage.setScene(scene);
 
             BasicRootLayoutController controller = loader.getController();
@@ -172,7 +173,7 @@ public class InitApp extends Application {
 
         } catch (Exception e) {
             Dialogs.create()
-                    .title("Error")
+                    .title("Information")
                     .masthead("Could not find last saved file: " + file.getPath())
                     .showInformation();
         }
@@ -203,7 +204,7 @@ public class InitApp extends Application {
 
         } catch (Exception e) {
             Dialogs.create()
-                    .title("Error")
+                    .title("Information")
                     .masthead("Could not save data to file: " + file.getPath())
                     .showInformation();
         }
