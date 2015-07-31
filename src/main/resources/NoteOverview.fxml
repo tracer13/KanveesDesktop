@@ -73,19 +73,19 @@
                   </AnchorPane>
                   <AnchorPane fx:id="taskAnchorPane" minHeight="373.0" minWidth="556.0" prefHeight="373.0" prefWidth="556.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane minHeight="381.0" minWidth="556.0" prefHeight="383.0" prefWidth="556.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="taskPane" minHeight="381.0" minWidth="556.0" prefHeight="383.0" prefWidth="556.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <TextField fx:id="taskTitleField" layoutX="14.0" layoutY="71.0" minHeight="25.0" minWidth="511.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="71.0" />
-                              <Button fx:id="closeTaskButton" layoutX="1.0" layoutY="249.0" mnemonicParsing="false" onAction="#handleCloseTask" prefHeight="25.0" prefWidth="88.0" text="Close Task" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" />
                               <Button layoutX="470.0" layoutY="291.0" mnemonicParsing="false" onAction="#handleSaveTask" text="Save" AnchorPane.bottomAnchor="51.0" AnchorPane.rightAnchor="31.0" />
                               <ComboBox fx:id="colorComboBox" layoutX="307.0" layoutY="32.0" prefHeight="25.0" prefWidth="63.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="32.0" />
                               <TextArea fx:id="taskDescriptionArea" layoutY="98.0" minHeight="82.0" minWidth="511.0" prefHeight="121.0" prefWidth="511.0" wrapText="true" AnchorPane.bottomAnchor="179.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="112.0" />
                               <Label layoutX="402.0" layoutY="9.0" text="Importance:" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="9.0" />
-                              <Button fx:id="reopenTaskButton" layoutX="1.0" layoutY="249.0" mnemonicParsing="false" onAction="#handleReopenTask" prefHeight="25.0" prefWidth="88.0" text="Reopen Task" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" />
                               <ChoiceBox fx:id="importanceChoiceBox" layoutX="402.0" layoutY="32.0" prefHeight="25.0" prefWidth="109.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="32.0" />
                               <Label layoutX="307.0" layoutY="9.0" text="Color Label:" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="9.0" />
                            </children>
                         </AnchorPane>
+                        <Button fx:id="reopenTaskButton" mnemonicParsing="false" onAction="#handleReopenTask" prefHeight="25.0" prefWidth="88.0" text="Reopen Task" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" />
+                        <Button fx:id="closeTaskButton" mnemonicParsing="false" onAction="#handleCloseTask" prefHeight="25.0" prefWidth="88.0" text="Close Task" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="14.0" />
                      </children>
                   </AnchorPane>
                </children>

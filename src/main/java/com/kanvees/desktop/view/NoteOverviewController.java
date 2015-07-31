@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
@@ -23,7 +22,7 @@ public class NoteOverviewController {
     private TabPane tabPane;
 
     @FXML
-    private Pane taskPane;
+    private AnchorPane taskPane;
 
     /**
      * Declaring fields for 'Notes'
@@ -354,6 +353,12 @@ public class NoteOverviewController {
             int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >=0){
                 noteTable.getItems().remove(selectedIndex);
+                noteAnchorPane.setVisible(false);
+                noteTable.getSelectionModel().clearSelection();
+                Dialogs.create()
+                        .title("Information")
+                        .masthead("Note has been removed")
+                        .showInformation();
             }else{
                 Dialogs.create()
                         .title("Information")
@@ -365,6 +370,12 @@ public class NoteOverviewController {
             int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >=0){
                 taskTable.getItems().remove(selectedIndex);
+                taskAnchorPane.setVisible(false);
+                taskTable.getSelectionModel().clearSelection();
+                Dialogs.create()
+                        .title("Information")
+                        .masthead("Task has been removed")
+                        .showInformation();
             }else{
                 Dialogs.create()
                         .title("Information")
