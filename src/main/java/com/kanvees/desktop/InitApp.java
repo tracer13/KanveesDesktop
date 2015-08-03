@@ -174,7 +174,7 @@ public class InitApp extends Application {
         } catch (Exception e) {
             Dialogs.create()
                     .title("Information")
-                    .masthead("Could not find last saved file: " + file.getPath())
+                    .masthead("Could not load last saved file: " + file.getPath())
                     .showInformation();
         }
     }

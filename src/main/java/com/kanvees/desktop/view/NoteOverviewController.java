@@ -115,6 +115,9 @@ public class NoteOverviewController {
         checkEmptyNotes();
     }
 
+    /**
+     * shows details of an existing or new task
+     */
     private void showTaskDetails(Task task){
 
         importanceChoiceBox.getItems().setAll(ImportanceEnum.values());
@@ -156,11 +159,11 @@ public class NoteOverviewController {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
+                    selectionRemover();
                     taskAnchorPane.setVisible(false);
-                    selectionRemover();
                 } else if (tabPane.getSelectionModel().getSelectedIndex() == 1) {
-                    noteAnchorPane.setVisible(false);
                     selectionRemover();
+                    noteAnchorPane.setVisible(false);
                 } else if (tabPane.getSelectionModel().getSelectedIndex() == 2) {
                     Dialogs.create()
                             .title("Notification")
@@ -290,6 +293,19 @@ public class NoteOverviewController {
                 reopenTaskButton.setVisible(false);
             }
         }
+    }
+
+    /**
+     * saves current task (is used in handleCloseTask() instead of handleSaveTask() method)
+     */
+    private void taskSaver(){
+        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+        Task task = taskTable.getItems().get(selectedIndex);
+        task.setTaskTitle(taskTitleField.getText());
+        task.setTaskDescription(taskDescriptionArea.getText());
+        task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
+        task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
+        task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -431,7 +447,7 @@ public class NoteOverviewController {
      */
     @FXML
     private void handleCloseTask() {
-        handleSaveTask();
+        taskSaver();
 
         int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
         Task task = taskTable.getItems().get(selectedIndex);
