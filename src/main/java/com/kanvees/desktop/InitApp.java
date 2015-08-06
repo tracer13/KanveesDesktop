@@ -1,8 +1,8 @@
 package com.kanvees.desktop;
 
-import com.kanvees.desktop.model.ItemListWrapper;
 import com.kanvees.desktop.model.Note;
 import com.kanvees.desktop.model.Task;
+import com.kanvees.desktop.model.util.ItemListWrapper;
 import com.kanvees.desktop.view.BasicRootLayoutController;
 import com.kanvees.desktop.view.NoteOverviewController;
 import javafx.application.Application;
@@ -214,13 +214,12 @@ public class InitApp extends Application {
     private void saveUserDataWhenAppIsClosed(){
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-
+                File userFile = getFilePathForUser();
                 Action confirmation = Dialogs.create()
-                        .title("Confirm save")
-                        .masthead("Would you like to save changes?")
-                        .showConfirm();
+                    .title("Confirm save")
+                    .masthead("Would you like to save changes?")
+                    .showConfirm();
                 if (confirmation == Dialog.ACTION_YES) {
-                    File userFile = getFilePathForUser();
 
                     if (userFile.exists()) {
                         saveUserDataToFile(userFile);
@@ -249,5 +248,25 @@ public class InitApp extends Application {
             }
         });
     }
+
+//    private boolean changesDetected (File file) throws JAXBException {
+//        boolean validator = false;
+//
+//        JAXBContext appContext = JAXBContext
+//                .newInstance(ItemListWrapper.class);
+//
+//        Unmarshaller itemUnmarshaller = appContext.createUnmarshaller();
+//
+//        ItemListWrapper itemListWrapper = (ItemListWrapper) itemUnmarshaller.unmarshal(file);
+//
+//        if (noteList == itemListWrapper.getNoteList() &&
+//                taskList == itemListWrapper.getTaskList()){
+//            validator = false;
+//        } else {
+//            validator = true;
+//        }
+//
+//        return validator;
+//    }
 
 }

@@ -1,4 +1,7 @@
-package com.kanvees.desktop.model;
+package com.kanvees.desktop.model.util;
+
+import com.kanvees.desktop.model.Note;
+import com.kanvees.desktop.model.Task;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

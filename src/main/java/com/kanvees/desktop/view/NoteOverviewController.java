@@ -16,6 +16,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import org.controlsfx.dialog.Dialogs;
 
+import java.util.Optional;
+
 public class NoteOverviewController {
 
     @FXML
@@ -151,6 +153,28 @@ public class NoteOverviewController {
     }
 
     /**
+     * Notification alert for tab change to save changes in notes\tasks
+     */
+    private void tabChangeSaveAlert(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText("Would you like to save changes?");
+
+        ButtonType buttonYes = new ButtonType ("YES");
+        ButtonType buttonNo = new ButtonType("NO");
+
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonYes && changesInTasksDetected()){
+            handleSaveTask();
+        }else if (result.get() == buttonYes && changesInNotesDetected()){
+            handleSaveNote();
+        }
+    }
+
+    /**
      * changes tabPane listener. When switching between tabs, content is cleared.
      */
     @SuppressWarnings("deprecation")
@@ -159,9 +183,15 @@ public class NoteOverviewController {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
+                    if (changesInTasksDetected()){
+                        tabChangeSaveAlert();
+                    }
                     selectionRemover();
                     taskAnchorPane.setVisible(false);
                 } else if (tabPane.getSelectionModel().getSelectedIndex() == 1) {
+                    if (changesInNotesDetected()){
+                        tabChangeSaveAlert();
+                    }
                     selectionRemover();
                     noteAnchorPane.setVisible(false);
                 } else if (tabPane.getSelectionModel().getSelectedIndex() == 2) {
@@ -222,6 +252,7 @@ public class NoteOverviewController {
      */
     private void setColorFillInComboBox() {
 
+        colorComboBox.getItems().clear();
         colorComboBox.getItems().setAll(ColorsEnum.values());
         Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>> factory = new Callback<ListView<ColorsEnum>, ListCell<ColorsEnum>>() {
             @Override
@@ -237,7 +268,8 @@ public class NoteOverviewController {
                         super.updateItem(item, empty);
 
                         if (item == null || empty) {
-                            setGraphic(null);
+                            rectangle.setFill(Color.web("TRANSPARENT"));
+                            setGraphic(rectangle);
                         }else {
                             rectangle.setFill(Color.web(item.toString()));
                             setGraphic(rectangle);
@@ -264,7 +296,8 @@ public class NoteOverviewController {
                     public void updateItem(ColorsEnum item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty){
-                            setGraphic(null);
+                            rectangle.setFill(Color.web("TRANSPARENT"));
+                            setGraphic(rectangle);
                         } else {
                             rectangle.setFill(Color.web(item.toString()));
                             setGraphic(rectangle);
@@ -298,14 +331,54 @@ public class NoteOverviewController {
     /**
      * saves current task (is used in handleCloseTask() instead of handleSaveTask() method)
      */
-    private void taskSaver(){
-        int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
-        Task task = taskTable.getItems().get(selectedIndex);
+    private void taskSaver(Task task) {
         task.setTaskTitle(taskTitleField.getText());
         task.setTaskDescription(taskDescriptionArea.getText());
         task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
         task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
         task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
+    }
+
+    /**
+     * Changes detector for Notes. Checks if current properties state differs from saved.
+     * Returns 'true' if there are unsaved changes
+     */
+    private boolean changesInNotesDetected() {
+        boolean validator = false;
+        if (noteTable.getSelectionModel().getSelectedIndex()>=0) {
+            int selectedIndex = noteTable.getSelectionModel().getSelectedIndex();
+            Note note = noteTable.getItems().get(selectedIndex);
+
+            if (!noteTitleField.getText().equals(note.getNoteTitle()) ||
+                    !noteBodyArea.getText().equals(note.getNoteBody())) {
+                validator = true;
+            } else {
+                validator = false;
+            }
+        }
+        return validator;
+    }
+
+    /**
+     * Changes detector for Tasks. Checks if current properties state differs from saved.
+     * Returns 'true' if there are unsaved changes
+     */
+    private boolean changesInTasksDetected() {
+        boolean validator = false;
+        if (taskTable.getSelectionModel().getSelectedIndex()>=0) {
+            int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
+            Task task = taskTable.getItems().get(selectedIndex);
+
+            if (!taskTitleField.getText().equals(task.getTaskTitle()) ||
+                    !taskDescriptionArea.getText().equals(task.getTaskDescription()) ||
+                    task.getImportance() != importanceChoiceBox.getSelectionModel().getSelectedItem() ||
+                    task.getColorLabel() != colorComboBox.getSelectionModel().getSelectedItem()) {
+                validator = true;
+            } else {
+                validator = false;
+            }
+        }
+        return validator;
     }
 
     /**
@@ -347,11 +420,7 @@ public class NoteOverviewController {
                     .masthead("Please fill in task title")
                     .showInformation();
         }else {
-            task.setTaskTitle(taskTitleField.getText());
-            task.setTaskDescription(taskDescriptionArea.getText());
-            task.setImportance((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem());
-            task.setImportanceString(((ImportanceEnum) importanceChoiceBox.getSelectionModel().getSelectedItem()).getStringValue());
-            task.setColorLabel((ColorsEnum) colorComboBox.getSelectionModel().getSelectedItem());
+            taskSaver(task);
             Dialogs.create()
                     .title("Information")
                     .masthead("Task has been saved!")
@@ -447,10 +516,10 @@ public class NoteOverviewController {
      */
     @FXML
     private void handleCloseTask() {
-        taskSaver();
-
         int selectedIndex = taskTable.getSelectionModel().getSelectedIndex();
         Task task = taskTable.getItems().get(selectedIndex);
+
+        taskSaver(task);
 
         task.setIsClosed(true);
         taskPane.setDisable(true);

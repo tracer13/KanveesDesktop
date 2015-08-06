@@ -84,7 +84,7 @@
                               <Label layoutX="307.0" layoutY="9.0" text="Color Label:" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="9.0" />
                            </children>
                         </AnchorPane>
-                        <Button fx:id="reopenTaskButton" mnemonicParsing="false" onAction="#handleReopenTask" prefHeight="25.0" prefWidth="88.0" text="Reopen Task" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" />
+                        <Button fx:id="reopenTaskButton" layoutX="14.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleReopenTask" prefHeight="25.0" prefWidth="88.0" text="Reopen Task" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="14.0" />
                         <Button fx:id="closeTaskButton" mnemonicParsing="false" onAction="#handleCloseTask" prefHeight="25.0" prefWidth="88.0" text="Close Task" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="14.0" />
                      </children>
                   </AnchorPane>
